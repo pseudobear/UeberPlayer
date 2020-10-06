@@ -309,6 +309,8 @@ const UpdateNotif = styled("div")`
 const UpdateText = styled("p")`
   font-size: .7em;
   text-align: center !important;
+  pointer-events: auto;
+  cursor: pointer;
 
   a {
     color: inherit;
