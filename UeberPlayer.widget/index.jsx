@@ -487,12 +487,14 @@ const prepareArtwork = (dispatch, song) => {
   img.onload = () => { dispatch({ type: "GET_ART", output: { img }})};
   img.onerror = () => {
     if (song.onlineArtwork !== "missing value" && img.src !== song.onlineArtwork) {
+      img.crossOrigin = 'anonymous';
       img.src = song.onlineArtwork;
     } else {
       dispatch({ type: "DEFAULT_ART" });
     }
   }
 
+  img.crossOrigin = 'anonymous';
   img.src = song.localArtwork;
 }
 
