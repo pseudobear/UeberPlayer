@@ -31,6 +31,9 @@ const options = {
   verticalPosition: "top",      // -> top (default) | center | bottom | "<number>" | "-<number>"
   horizontalPosition: "left",   // -> left (default) | center | right | "<number>" | "-<number>"
 
+  /* Widget visibility! */
+  alwaysShow: 0,                // -> 0 (default) | 1 | 2
+
   /* Adaptive colors! */
   adaptiveColors: true,         // -> true (default) | false
   minContrast: 2.6,             // -> 2.6 (default) | number
@@ -48,6 +51,7 @@ const options = {
 
 ### Size
 Select from one of the 4 available sizes by setting `size`:
+
 - `big` (default): Big and bold player!
 - `medium`: Slightly smaller version of the big player, with more concise information.
 - `small`: Horizontal-like player. Smaller but pretty colorful.
@@ -65,6 +69,15 @@ They also allow number values (enclosed as a string) for pixel measurements from
   - If you're using the mini player, this setting will also affect its text alignment
 
 > Note: When using number values, make sure they're enclosed in quotes, like `"5"`, `"-10"`, etc.
+
+### Visibility
+By default, the widget will only show when a track is being played; otherwise, it will hide itself. This behavior can be altered with the `alwaysShow` option. The following values will change its behavior:
+
+- `0` (default): The player will only show when a track is being played.
+- `1`: The player will only show when a music player is open, regardless if a track is playing or paused (for example, when Spotify is open, but playback is paused).
+- `2`: The player will always be displayed, regardless of anything.
+
+> Note: When `alwaysShow` is set to `1` or `2`, a small caveat present is that the widget won't update until the track begins playing again. This is usually not a problem, but cases like the widget startup or restarting the music app will yield outdated information in the widget until a track plays again.
 
 ### Adaptive colors
 You can have adaptive colors based on the current track's artwork! If you're worried about performance, there's no need to worry because it performs this process only when the track changes (though you're free to disable it for whatever reason).
