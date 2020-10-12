@@ -35,12 +35,6 @@ const options = {
 /* ROOT STYLING */
 
 export const className = `
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   color: white;
 
@@ -330,8 +324,6 @@ const UpdateNotif = styled("div")`
 const UpdateText = styled("p")`
   font-size: .7em;
   text-align: center !important;
-  pointer-events: auto;
-  cursor: pointer;
 
   a {
     color: inherit;
