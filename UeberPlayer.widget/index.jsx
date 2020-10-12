@@ -15,6 +15,9 @@ const options = {
   verticalPosition: "top",      // -> top (default) | center | bottom | "<number>" | "-<number>"
   horizontalPosition: "left",   // -> left (default) | center | right | "<number>" | "-<number>"
 
+  /* Widget visibility! */
+  alwaysShow: 0,                // -> 0 (default) | 1 | 2
+
   /* Adaptive colors! */
   adaptiveColors: true,         // -> true (default) | false
   minContrast: 2.6,             // -> 2.6 (default) | number
@@ -82,7 +85,7 @@ const Wrapper = styled("div")`
   border-radius: 6px;
   overflow: hidden;
   box-shadow: 0 16px 32px 9px #0005;
-  opacity: ${props => props.playing ? 1 : 0};
+  opacity: ${props => props.show ? 1 : 0};
   background: ${props => (props.bg !== undefined) ? props.bg : "#0004"};
   transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   ${wrapperPos}
@@ -265,6 +268,12 @@ const Track = styled("p")`
   font-size: .7em;
   color: ${props => props.color ? props.color : "inherit"};
 
+  &::after {
+    content: '';
+    display: inline-block;
+    width: 0;
+  }
+
   &.small {
     font-size: .65em;
   }
@@ -277,6 +286,12 @@ const Track = styled("p")`
 const Artist = styled("p")`
   font-size: .7em;
   color: ${props => props.color ? props.color : "inherit"};
+
+  &::after {
+    content: '';
+    display: inline-block;
+    width: 0;
+  }
 
   &.small {
     font-size: .65em;
@@ -291,6 +306,12 @@ const Album = styled("p")`
   font-size: .65em;
   color: ${props => props.color ? props.color : "inherit"};
   opacity: .75;
+
+  &::after {
+    content: '';
+    display: inline-block;
+    width: 0;
+  }
 
   &.small {
     font-size: .55em;
@@ -341,6 +362,7 @@ export const init = (dispatch) => {
 export const command = "osascript UeberPlayer.widget/lib/getTrack.scpt";
 
 export const initialState = {
+  app: "",                                          // Current music software being used
   playing: false,                                   // If currently playing a soundtrack
   songChange: false,                                // If the song changed
   primaryColor: undefined,                          // Primary color from artwork
@@ -450,10 +472,11 @@ const updateSongData = (output, error, previousState) => {
 
   // State controller
   if (!playing) {   // If player is paused
-    return { ...previousState, playing };
+    return { ...previousState, app, playing };
   } else if (track !== previousState.song.track || album !== previousState.song.album) {    // Song change
     return {
       ...previousState,
+      app,
       playing,
       songChange: true,
       song: {
@@ -469,6 +492,7 @@ const updateSongData = (output, error, previousState) => {
   } else {  // Currently playing
     return {
       ...previousState,
+      app,
       playing,
       song: {
         ...previousState.song,
@@ -570,8 +594,11 @@ const mini = ({ track, artist, elapsed, duration }, primaryColor, secondaryColor
 )
 
 // Render function
-export const render = ({ playing, songChange, primaryColor, secondaryColor, tercaryColor, artwork, song, updateAvailable }, dispatch) => {
-  const { size, horizontalPosition, verticalPosition } = options;
+export const render = ({ app, playing, songChange, primaryColor, secondaryColor, tercaryColor, artwork, song, updateAvailable }, dispatch) => {
+  const { size, horizontalPosition, verticalPosition, alwaysShow } = options;
+
+  // Determine widget visability
+  const showWidget = playing || (alwaysShow === 1 && app) || alwaysShow === 2;
 
   // When song changes, prepare artwork
   if (songChange) {
@@ -580,11 +607,11 @@ export const render = ({ playing, songChange, primaryColor, secondaryColor, terc
 
   // Render
   return (size === "mini") ? (
-    <MiniWrapper playing={playing} horizontal={horizontalPosition} vertical={verticalPosition}>
+    <MiniWrapper show={showWidget} horizontal={horizontalPosition} vertical={verticalPosition}>
       {mini(song, primaryColor, secondaryColor, updateAvailable)}
     </MiniWrapper>
   ) : (
-    <Wrapper playing={playing} bg={primaryColor} horizontal={horizontalPosition} vertical={verticalPosition}>
+    <Wrapper show={showWidget} bg={primaryColor} horizontal={horizontalPosition} vertical={verticalPosition}>
       {size === "big" && big(song, secondaryColor, tercaryColor, artwork, updateAvailable)}
       {size === "medium" && medium(song, secondaryColor, tercaryColor, artwork, updateAvailable)}
       {size === "small" && small(song, secondaryColor, tercaryColor, artwork, updateAvailable)}

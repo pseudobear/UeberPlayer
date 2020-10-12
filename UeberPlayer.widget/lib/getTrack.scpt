@@ -44,10 +44,11 @@ end try
 -- Get Spotify track data if playing
 if spotifyInstalled and application "Spotify" is running then
   tell application "Spotify"
+    set appName to "Spotify"
+
     using terms from application "Music"
       if player state is playing then
         set playingState to true
-        set appName to "Spotify"
       end if
     end using terms from
 
@@ -67,9 +68,10 @@ end if
 -- Get Apple Music track data if playing
 if playingState is false and application "Music" is running then
   tell application "Music"
+    set appName to "Music"
+
     if player state is playing then
       set playingState to true
-      set appName to "Music"
       set trackName to the name of current track
       set artistName to the artist of current track
       set albumName to the album of current track
