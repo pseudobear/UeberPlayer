@@ -65,7 +65,7 @@ if spotifyInstalled and application "Spotify" is running then
   end tell
 end if
 
--- Get Apple Music track data if playing
+-- Get default Apple music app data if playing
 if playingState is false and application "Music" is running then
   tell application "Music"
     set appName to "Music"
