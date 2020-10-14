@@ -5,7 +5,7 @@ An [Übersicht](http://tracesof.net/uebersicht/) widget that displays the curren
 ![screenshot](screenshot.png)
 
 ## Features
-- Supports Apple Music and Spotify
+- Supports iTunes (pre-Catalina), Apple Music, and Spotify
 - Comes in 4 different sizes
 - Displays artwork (all done locally when possible for both platforms)
 - Temporarily caches artwork for offline use and quicker loading
