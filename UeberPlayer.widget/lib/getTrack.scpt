@@ -178,7 +178,7 @@ on extractMusicArt()
   -- Use alternate way of getting the path because the other one doesn't work for some reason?
   set myAltPath to POSIX path of (path to me)
 	set AppleScript's text item delimiters to "/"
-	set myAltPath to (myAltPath's text items 1 thru -2 as string) & "/"
+	set myAltPath to (myAltPath's text items 1 thru -3 as string) & "/"
 	set AppleScript's text item delimiters to ""
   set myAltPath to (myAltPath as POSIX file) & "cache:" & artworkFilename as string
 
