@@ -9,7 +9,7 @@ For more details about these settings: please visit https://github.com/aClueless
 
 const options = {
   /* Widget size! */
-  size: "mini",                  // -> big (default) | medium | small | mini
+  size: "big",                  // -> big (default) | medium | small | mini
 
   /* Widget position! */
   verticalPosition: "top",      // -> top (default) | center | bottom | "<number>" | "-<number>"
@@ -218,6 +218,7 @@ const Artwork = styled("img")`
   bottom: 0;
   right: 0;
   height: 100%;
+  width: 100%;
   object-fit: cover;
   opacity: ${props => props.show ? 1 : 0};
 `;
