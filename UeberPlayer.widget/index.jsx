@@ -188,7 +188,9 @@ const ArtworkWrapper = styled("div")`
   &.mini {
     width: 65px;
     height: 65px;
+    border-radius: 4px;
     margin-right: 10px;
+    overflow: hidden;
   }
 
   &::before {
