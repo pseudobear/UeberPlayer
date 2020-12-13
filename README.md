@@ -38,8 +38,9 @@ const options = {
   adaptiveColors: true,         // -> true (default) | false
   minContrast: 2.6,             // -> 2.6 (default) | number
 
-  /* Dual-colored progress bar! */
+  /* Visual customization! */
   dualProgressBar: false,       // -> true | false (default)
+  miniArtwork: false,           // -> true | false (default)
 
   /* Cache setting! */
   cacheMaxDays: 15,             // -> 15 (default) | <number>
@@ -100,6 +101,13 @@ You can choose to have a dual-colored progress bar. The second color is applied 
 ![dual-progress-bar](images/dualbar.png)
 
 > Note: The mini player will always have its "empty" area, but this setting will add some color to it.
+
+### Mini artwork
+When the `size` settings is set to `mini`, you can optionally show or hide the artwork, using the `miniArtwork` setting. The text box and alignment wil adjust accordingly.
+
+- `miniArtwork`: `true`, `false` (default)
+
+![mini-artwork](images/miniart.png)
 
 ### Caching
 This widget caches artwork images for quicker loading & offline usage. To help manage space, every time you load or refresh this widget, it checks the cache for any "old" artwork (from albums you haven't played in a while) and deletes them.

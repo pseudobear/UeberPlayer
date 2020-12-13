@@ -23,8 +23,8 @@ const options = {
   minContrast: 2.6,             // -> 2.6 (default) | number
 
   /* Visual customization! */
-  dualProgressBar: false,       // -> true | false (default)
-  miniArtwork: true,           // -> true | false (default)
+  dualProgressBar: true,       // -> true | false (default)
+  miniArtwork: false,           // -> true | false (default)
 
   /* Cache setting! */
   cacheMaxDays: 15,             // -> 15 (default) | <number>
