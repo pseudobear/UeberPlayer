@@ -15,6 +15,7 @@ set artworkURL to ""
 set artworkFilename to ""
 set trackDuration to 0
 set timeElapsed to 0
+set musicError to false
 
 set artExtension to ""
 
@@ -72,18 +73,22 @@ if playingState is false and application "Music" is running then
 
     if player state is playing then
       set playingState to true
-      set trackName to the name of current track
-      set artistName to the artist of current track
-      set albumName to the album of current track
-      set artworkURL to ""
-      set trackDuration to the duration of current track
-      set timeElapsed to the player position
+      try
+        set trackName to the name of current track
+        set artistName to the artist of current track
+        set albumName to the album of current track
+        set artworkURL to ""
+        set trackDuration to the duration of current track
+        set timeElapsed to the player position
 
-      if format of item 1 of artworks in current track is «class PNG » then
-        set artExtension to ".png"
-      else
-        set artExtension to ".jpg"
-      end if
+        if format of item 1 of artworks in current track is «class PNG » then
+          set artExtension to ".png"
+        else
+          set artExtension to ".jpg"
+        end if
+      on error e
+        set musicError to true
+      end try
     end if
   end tell
 end if
@@ -103,7 +108,7 @@ if playingState and my songChanged() then
     try
       if appName is "Spotify" then
         my extractSpotifyArt()
-      else if appName is "Music" then
+      else if appName is "Music" and not musicError then
         my extractMusicArt()
       end if
     end try
@@ -111,7 +116,7 @@ if playingState and my songChanged() then
 end if
 
 -- Return results
-set retList to {playingState, appName, trackName, artistName, albumName, artworkURL, artworkFilename, trackDuration, timeElapsed}
+set retList to {playingState, appName, trackName, artistName, albumName, artworkURL, artworkFilename, trackDuration, timeElapsed, musicError}
 set AppleScript's text item delimiters to " @@ "
 set retStr to retList as string
 set AppleScript's text item delimiters to ""

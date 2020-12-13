@@ -128,6 +128,22 @@ const MiniWrapper = styled(Wrapper)`
   }
 `
 
+const ErrorWrapper = styled('div')`
+  width: 360px;
+  padding: 1em;
+  text-align: center;
+  font-size: .9em;
+
+  * + * {
+    margin-top: .4em;
+  }
+
+  h3 {
+    font-style: italic;
+    color: #ddd;
+  }
+`
+
 const BigPlayer = styled("div")`
   display: flex;
   flex-direction: column;
@@ -388,6 +404,7 @@ export const command = "osascript UeberPlayer.widget/lib/getTrack.scpt";
 export const initialState = {
   app: "",                                          // Current music software being used
   playing: false,                                   // If currently playing a soundtrack
+  appleMusicError: false,                           // If online music is being played on Apple Music
   songChange: false,                                // If the song changed
   primaryColor: undefined,                          // Primary color from artwork
   secondaryColor: undefined,                        // Secondary color from artwork
@@ -487,21 +504,24 @@ const updateSongData = (output, error, previousState) => {
     artworkURL,
     artworkFilename,
     duration,
-    elapsed
-  ] = output.split(" @@ ");
+    elapsed,
+    appleMusicError
+  ] = output.trim().split(" @@ ");
 
   playing = (playing === "true");
+  appleMusicError = (appleMusicError === "true");
   duration = Math.floor(parseFloat(duration));
   elapsed = Math.floor(parseFloat(elapsed));
 
   // State controller
-  if (!playing) {   // If player is paused
-    return { ...previousState, app, playing };
+  if (!playing || appleMusicError) {   // If player is paused or if online music is being played on Apple Music
+    return { ...previousState, app, playing, appleMusicError };
   } else if (track !== previousState.song.track || album !== previousState.song.album) {    // Song change
     return {
       ...previousState,
       app,
       playing,
+      appleMusicError,
       songChange: true,
       song: {
         track,
@@ -518,6 +538,7 @@ const updateSongData = (output, error, previousState) => {
       ...previousState,
       app,
       playing,
+      appleMusicError,
       song: {
         ...previousState.song,
         elapsed
@@ -625,7 +646,7 @@ const mini = ({ track, artist, elapsed, duration }, primaryColor, secondaryColor
 )
 
 // Render function
-export const render = ({ app, playing, songChange, primaryColor, secondaryColor, tercaryColor, artwork, song, updateAvailable }, dispatch) => {
+export const render = ({ app, playing, appleMusicError, songChange, primaryColor, secondaryColor, tercaryColor, artwork, song, updateAvailable }, dispatch) => {
   const { size, horizontalPosition, verticalPosition, alwaysShow } = options;
 
   // Determine widget visability
@@ -634,6 +655,19 @@ export const render = ({ app, playing, songChange, primaryColor, secondaryColor,
   // When song changes, prepare artwork
   if (songChange) {
     prepareArtwork(dispatch, song);
+  }
+
+  // If Apple Music is playing online music, warn the user that it cannot get information for it
+  if (appleMusicError) {
+    return (
+      <Wrapper show={showWidget} horizontal={horizontalPosition} vertical={verticalPosition}>
+        <ErrorWrapper>
+          <h3>Online Apple Music detected</h3>
+          <p>Unfortunately, the widget is unable to access songs being streamed online through Apple Music.</p>
+          <p>To fix this, please download your music to your library and play it locally from there.</p>
+        </ErrorWrapper>
+      </Wrapper>
+    )
   }
 
   // Render
