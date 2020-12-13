@@ -9,7 +9,7 @@ For more details about these settings: please visit https://github.com/aClueless
 
 const options = {
   /* Widget size! */
-  size: "big",                  // -> big (default) | medium | small | mini
+  size: "mini",                  // -> big (default) | medium | small | mini
 
   /* Widget position! */
   verticalPosition: "top",      // -> top (default) | center | bottom | "<number>" | "-<number>"
@@ -22,8 +22,9 @@ const options = {
   adaptiveColors: true,         // -> true (default) | false
   minContrast: 2.6,             // -> 2.6 (default) | number
 
-  /* Dual-colored progress bar! */
+  /* Visual customization! */
   dualProgressBar: false,       // -> true | false (default)
+  miniArtwork: true,           // -> true | false (default)
 
   /* Cache setting! */
   cacheMaxDays: 15,             // -> 15 (default) | <number>
@@ -148,6 +149,15 @@ const MiniPlayer = styled("div")`
   * {
     text-shadow: 0px 0px 4px #0004, 0px 2px 12px #0004;
   }
+`
+
+const MiniInfo = styled("div")`
+  display: flex;
+  align-items: center;
+`
+
+const MiniDetails = styled("div")`
+  flex: 1;
 
   > * + * {
     margin-top: .5em;
@@ -169,6 +179,12 @@ const ArtworkWrapper = styled("div")`
     height: 80px;
   }
 
+  &.mini {
+    width: 65px;
+    height: 65px;
+    margin-right: 10px;
+  }
+
   &::before {
     position: absolute;
     content: "";
@@ -180,6 +196,10 @@ const ArtworkWrapper = styled("div")`
     background: #fff1;
     backdrop-filter: blur(8px) brightness(90%) contrast(80%) saturate(140%);
     z-index: -1;
+  }
+
+  &.mini::before {
+    border-radius: 0;
   }
 `
 
@@ -254,6 +274,7 @@ const Progress = styled("div")`
     background: ${props => options.dualProgressBar && props.emptyColor ? (props.emptyColor + "60") : "#0005"};
     box-shadow: 0 3px 5px -1px #0003;
     overflow: hidden;
+    margin-top: 10px;
   }
 `
 
@@ -576,10 +597,17 @@ const small = ({ track, artist, album, elapsed, duration }, secondaryColor, terc
 )
 
 // Mini player component
-const mini = ({ track, artist, elapsed, duration }, primaryColor, secondaryColor, updateAvailable) => (
+const mini = ({ track, artist, elapsed, duration }, primaryColor, secondaryColor, artwork, updateAvailable) => (
   <MiniPlayer>
-    <Track className="mini">{track}</Track>
-    <Artist className="mini">{artist}</Artist>
+    <MiniInfo>
+      {options.miniArtwork && (
+        artworkImage("mini", artwork)
+      )}
+      <MiniDetails>
+        <Track className="mini">{track}</Track>
+        <Artist className="mini">{artist}</Artist>
+      </MiniDetails>
+    </MiniInfo>
     <Progress className="mini" progressColor={primaryColor} emptyColor={secondaryColor} percent={elapsed / duration * 100}/>
     {updateAvailable && updateNotif(true)}
   </MiniPlayer>
@@ -600,7 +628,7 @@ export const render = ({ app, playing, songChange, primaryColor, secondaryColor,
   // Render
   return (size === "mini") ? (
     <MiniWrapper show={showWidget} horizontal={horizontalPosition} vertical={verticalPosition}>
-      {mini(song, primaryColor, secondaryColor, updateAvailable)}
+      {mini(song, primaryColor, secondaryColor, artwork, updateAvailable)}
     </MiniWrapper>
   ) : (
     <Wrapper show={showWidget} bg={primaryColor} horizontal={horizontalPosition} vertical={verticalPosition}>
