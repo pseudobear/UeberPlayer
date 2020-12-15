@@ -1,6 +1,7 @@
 
 import { styled, run } from "uebersicht";
 import getColors from './lib/getColors.js';
+import updateWidget from './lib/updater.js';
 const _version = '1.3.0';
 
 /* CUSTOMIZATION (mess around here!)
@@ -373,13 +374,9 @@ const UpdateText = styled("p")`
   pointer-events: auto;
   cursor: pointer;
 
-  a {
+  span {
     color: inherit;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
+    text-decoration: underline;
   }
 `
 
@@ -578,13 +575,13 @@ const artworkImage = (wrapperClass, { art1, art2, alternate }) => (
 
 // Update notification component
 const updateNotif = ( text, color = 'inherit' ) => {
-  return text ? (
-    <UpdateText style={{ color }}><a href="https://raw.githubusercontent.com/aCluelessDanny/UeberPlayer/master/UeberPlayer.widget.zip">An update is available!</a></UpdateText>
-  ) : (
-    <UpdateNotif>
-      <UpdateText><a href="https://raw.githubusercontent.com/aCluelessDanny/UeberPlayer/master/UeberPlayer.widget.zip">An update is available!</a></UpdateText>
-    </UpdateNotif>
+  const updateLink = (
+    <UpdateText style={{ color }}>
+      <span onClick={() => updateWidget(options)}>Hello updater</span>
+    </UpdateText>
   )
+
+  return text ? updateLink : <UpdateNotif>{updateLink}</UpdateNotif>;
 }
 
 // Big player component
