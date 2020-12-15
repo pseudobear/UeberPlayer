@@ -3,7 +3,7 @@ import { styled, run } from "uebersicht";
 import getColors from './lib/getColors.js';
 import updateWidget from './lib/updater.js';
 const _version = '1.3.0';
-let _updateTimer = 8;
+let _updateTimer = 8.5;
 
 /* CUSTOMIZATION (mess around here!)
 You may need to refresh the widget after changing these settings
@@ -487,7 +487,7 @@ const checkForUpdate = async (dispatch) => {
   if (!resp.ok) { throw Error("Unable to check for update!") }
 
   let data = await resp.json();
-  if (_version !== data.version || true) {
+  if (_version !== data.version) {
     console.log(`There's an update available! -> ${data.version}`);
     dispatch({ type: "UPDATE_AVAILABLE" });
   }
@@ -589,7 +589,7 @@ const updateNotif = (dispatch, updatePending, text, color = 'inherit') => {
   const updateLink = (
     <UpdateText style={{ color }}>
       {updatePending ? (
-        <span style={{ textDecoration: 'none', fontStyle: 'italic' }}><b>Updating!</b> You might need to restart Ubersicht when finished... ({_updateTimer})</span>
+        <span style={{ textDecoration: 'none', fontStyle: 'italic' }}><b>Updating!</b> You might need to restart Ubersicht when finished... ({Math.floor(_updateTimer)})</span>
       ) : (
         <span onClick={() => dispatch({ type: "PREPARE_UPDATE" })}>An update is available!</span>
       )}
