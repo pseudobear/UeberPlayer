@@ -3,6 +3,7 @@ import { styled, run } from "uebersicht";
 import getColors from './lib/getColors.js';
 import updateWidget from './lib/updater.js';
 const _version = '1.3.0';
+let _updateTimer = 8;
 
 /* CUSTOMIZATION (mess around here!)
 You may need to refresh the widget after changing these settings
@@ -406,7 +407,7 @@ export const initialState = {
   primaryColor: undefined,                          // Primary color from artwork
   secondaryColor: undefined,                        // Secondary color from artwork
   tercaryColor: undefined,                          // Tercary color from artwork
-  artwork: {                                          // Artwork source URL to be used
+  artwork: {                                        // Artwork source URL to be used
     art1: "UeberPlayer.widget/default.png",
     art2: "UeberPlayer.widget/default.png",
     alternate: true
@@ -420,7 +421,8 @@ export const initialState = {
     duration: 0,                                    // Total duration of soundtrack in seconds
     elapsed: 0                                      // Total time elapsed in seconds
   },
-  updateAvailable: false                            // Flag for when an update's available
+  updateAvailable: false,                           // Flag for when an update's available
+  updatePending: false,                             // Flag for when an update's about to happen
 };
 
 // Update state
@@ -462,6 +464,15 @@ export const updateState = ({ type, output, error }, previousState) => {
       }
     case 'UPDATE_AVAILABLE':
       return { ...previousState, updateAvailable: true }
+    case 'PREPARE_UPDATE':
+      console.log('Preparing update!');
+      const updateCountdown = setInterval(() => {
+        if (--_updateTimer <= 0) {
+          updateWidget(options);
+          window.clearInterval(updateCountdown);
+        }
+      }, 1000);
+      return { ...previousState, updatePending: true }
     default:
       console.error("Invalid dispatch type?");
       return previousState;
@@ -476,7 +487,7 @@ const checkForUpdate = async (dispatch) => {
   if (!resp.ok) { throw Error("Unable to check for update!") }
 
   let data = await resp.json();
-  if (_version !== data.version) {
+  if (_version !== data.version || true) {
     console.log(`There's an update available! -> ${data.version}`);
     dispatch({ type: "UPDATE_AVAILABLE" });
   }
@@ -574,10 +585,14 @@ const artworkImage = (wrapperClass, { art1, art2, alternate }) => (
 )
 
 // Update notification component
-const updateNotif = ( text, color = 'inherit' ) => {
+const updateNotif = (dispatch, updatePending, text, color = 'inherit') => {
   const updateLink = (
     <UpdateText style={{ color }}>
-      <span onClick={() => updateWidget(options)}>Hello updater</span>
+      {updatePending ? (
+        <span style={{ textDecoration: 'none', fontStyle: 'italic' }}><b>Updating!</b> You might need to restart Ubersicht when finished... ({_updateTimer})</span>
+      ) : (
+        <span onClick={() => dispatch({ type: "PREPARE_UPDATE" })}>An update is available!</span>
+      )}
     </UpdateText>
   )
 
@@ -585,10 +600,10 @@ const updateNotif = ( text, color = 'inherit' ) => {
 }
 
 // Big player component
-const big = ({ track, artist, album, elapsed, duration }, secondaryColor, tercaryColor, artwork, updateAvailable) => (
+const big = (dispatch, { track, artist, album, elapsed, duration }, secondaryColor, tercaryColor, artwork, updateAvailable, updatePending) => (
   <BigPlayer>
     {artworkImage("big", artwork)}
-    {updateAvailable && updateNotif(false)}
+    {updateAvailable && updateNotif(dispatch, updatePending, false)}
     <Information>
       <Progress progressColor={secondaryColor} emptyColor={tercaryColor} percent={elapsed / duration * 100}/>
       <Track className="small" color={secondaryColor}>{track}</Track>
@@ -599,10 +614,10 @@ const big = ({ track, artist, album, elapsed, duration }, secondaryColor, tercar
 );
 
 // Medium player component
-const medium = ({ track, artist, elapsed, duration }, secondaryColor, tercaryColor, artwork, updateAvailable) => (
+const medium = (dispatch, { track, artist, elapsed, duration }, secondaryColor, tercaryColor, artwork, updateAvailable, updatePending) => (
   <MediumPlayer>
     {artworkImage("medium", artwork)}
-    {updateAvailable && updateNotif(false)}
+    {updateAvailable && updateNotif(dispatch, updatePending, false)}
     <Information>
       <Progress progressColor={secondaryColor} emptyColor={tercaryColor} percent={elapsed / duration * 100}/>
       <Track color={secondaryColor}>{track}</Track>
@@ -612,21 +627,21 @@ const medium = ({ track, artist, elapsed, duration }, secondaryColor, tercaryCol
 )
 
 // Small player component
-const small = ({ track, artist, album, elapsed, duration }, secondaryColor, tercaryColor, artwork, updateAvailable) => (
+const small = (dispatch, { track, artist, album, elapsed, duration }, secondaryColor, tercaryColor, artwork, updateAvailable, updatePending) => (
   <SmallPlayer>
     {artworkImage("small", artwork)}
     <Information className="small">
       <Track color={secondaryColor}>{track}</Track>
       <Artist color={tercaryColor}>{artist}</Artist>
       <Album color={tercaryColor}>{album}</Album>
-      {updateAvailable && updateNotif(true, secondaryColor)}
+      {updateAvailable && updateNotif(dispatch, updatePending, true, secondaryColor)}
       <Progress progressColor={secondaryColor} emptyColor={tercaryColor} className="small" percent={elapsed / duration * 100}/>
     </Information>
   </SmallPlayer>
 )
 
 // Mini player component
-const mini = ({ track, artist, elapsed, duration }, primaryColor, secondaryColor, artwork, updateAvailable) => (
+const mini = (dispatch, { track, artist, elapsed, duration }, primaryColor, secondaryColor, artwork, updateAvailable, updatePending) => (
   <MiniPlayer>
     <MiniInfo>
       {options.miniArtwork && (
@@ -638,12 +653,12 @@ const mini = ({ track, artist, elapsed, duration }, primaryColor, secondaryColor
       </MiniDetails>
     </MiniInfo>
     <Progress className="mini" progressColor={primaryColor} emptyColor={secondaryColor} percent={elapsed / duration * 100}/>
-    {updateAvailable && updateNotif(true)}
+    {updateAvailable && updateNotif(dispatch, updatePending, true)}
   </MiniPlayer>
 )
 
 // Render function
-export const render = ({ app, playing, appleMusicError, songChange, primaryColor, secondaryColor, tercaryColor, artwork, song, updateAvailable }, dispatch) => {
+export const render = ({ app, playing, appleMusicError, songChange, primaryColor, secondaryColor, tercaryColor, artwork, song, updateAvailable, updatePending }, dispatch) => {
   const { size, horizontalPosition, verticalPosition, alwaysShow } = options;
 
   // Determine widget visability
@@ -670,13 +685,13 @@ export const render = ({ app, playing, appleMusicError, songChange, primaryColor
   // Render
   return (size === "mini") ? (
     <MiniWrapper show={showWidget} horizontal={horizontalPosition} vertical={verticalPosition}>
-      {mini(song, primaryColor, secondaryColor, artwork, updateAvailable)}
+      {mini(dispatch, song, primaryColor, secondaryColor, artwork, updateAvailable, updatePending)}
     </MiniWrapper>
   ) : (
     <Wrapper show={showWidget} bg={primaryColor} horizontal={horizontalPosition} vertical={verticalPosition}>
-      {size === "big" && big(song, secondaryColor, tercaryColor, artwork, updateAvailable)}
-      {size === "medium" && medium(song, secondaryColor, tercaryColor, artwork, updateAvailable)}
-      {size === "small" && small(song, secondaryColor, tercaryColor, artwork, updateAvailable)}
+      {size === "big" && big(dispatch, song, secondaryColor, tercaryColor, artwork, updateAvailable, updatePending)}
+      {size === "medium" && medium(dispatch, song, secondaryColor, tercaryColor, artwork, updateAvailable, updatePending)}
+      {size === "small" && small(dispatch, song, secondaryColor, tercaryColor, artwork, updateAvailable, updatePending)}
     </Wrapper>
   )
 };
