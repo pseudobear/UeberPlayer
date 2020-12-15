@@ -239,6 +239,7 @@ const Artwork = styled("img")`
   width: 100%;
   object-fit: cover;
   opacity: ${props => props.show ? 1 : 0};
+  transition: opacity .5s linear;
 `;
 
 const Information = styled("div")`
