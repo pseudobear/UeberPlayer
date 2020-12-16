@@ -2,7 +2,7 @@
 import { styled, run } from "uebersicht";
 import getColors from './lib/getColors.js';
 import updateWidget from './lib/updater.js';
-const _version = '1.3.0';
+const _version = '1.4.0';
 let _updateTimer = 8.5;
 
 /* CUSTOMIZATION (mess around here!)
