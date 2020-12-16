@@ -81,9 +81,9 @@ By default, the widget will only show when a track is being played; otherwise, i
 > Note: When `alwaysShow` is set to `1` or `2`, a small caveat present is that the widget won't update until the track begins playing again. This is usually not a problem, but cases like the widget startup or restarting the music app will yield outdated information in the widget until a track plays again.
 
 ### Adaptive colors
-You can have adaptive colors based on the current track's artwork! If you're worried about performance, there's no need to worry because it performs this process only when the track changes (though you're free to disable it for whatever reason).
+You can have adaptive colors based on the current track's artwork! This can be activated by setting `adaptiveColors` to `true`. If you're worried about performance, there's no need to worry because it performs this process only when the track changes (though you're free to disable it for whatever reason).
 
-You can also set the minimum contrast (`minContrast`) the text and background must be for a color to be used when extracting them. This _won't_ modify the colors selected, but rather the selection of colors (in other words, different values can yield different color combos). The default value should be good on its own, but you can tweak it to your needs. The higher the value, the more contrast it'll attempt to achieve (a good place to test and read up about it is with the [Contrast Ratio site](https://contrast-ratio.com/)).
+You can also set the minimum contrast with `minContrast`. The text and background must be for a color to be used when extracting them. This _won't_ modify the colors selected, but rather the selection of colors (in other words, different values can yield different color combos). The default value should be good on its own, but you can tweak it to your needs. The higher the value, the more contrast it'll attempt to achieve (a good place to test and read up about it is with the [Contrast Ratio site](https://contrast-ratio.com/)).
 
 - `adaptiveColors`: `true` (default), `false`
 - `minContrast`: `2.6` (default), `<number>`
@@ -103,7 +103,7 @@ You can choose to have a dual-colored progress bar. The second color is applied 
 > Note: The mini player will always have its "empty" area, but this setting will add some color to it.
 
 ### Mini artwork
-When the `size` settings is set to `mini`, you can optionally show or hide the artwork, using the `miniArtwork` setting. The text box and alignment wil adjust accordingly.
+When `size` is set to `mini`, you can optionally show or hide the artwork, using the `miniArtwork` setting. The text box and alignment wil adjust accordingly.
 
 - `miniArtwork`: `true`, `false` (default)
 
@@ -117,7 +117,9 @@ This setting sets how many days old the artwork must be for it to be deleted fro
 - `cacheMaxDays`: `15` (default), `<number>`
 
 ### Update checking
-This widget can also periodically check for any available updates if there are any present. When `checkForUpdates` is true, it will check for updates on startup and then subsequently every 24 hours. If an update is available, a small text will appear, and upon clicking it, it will open the download to the latest widget. If you wish to disable this check and display, simple turn off `checkForUpdates`.
+This widget can also periodically check for any available updates. When `checkForUpdates` is `true`, it will check for updates on startup and then subsequently every 24 hours. If an update is available, a small link will appear.
+
+Clicking this link will run a script to automatically download and update the widget, while carrying over your settings to the new version (beta). You may need to restart Ubersicht upon completion.
 
 ![update](images/update.png)
 
@@ -126,4 +128,4 @@ This widget can also periodically check for any available updates if there are a
 > **NOTE**: The link in the text is only clickable if you've enabled the `Enable interaction` option within Ubersicht. It can still serve as an update notification if you desire to leave the option off though.
 
 ## Developing
-Just in case someone's curious on developing this as well, I have a `gulp dev` script here so it can streamline development a bit. Simply run `npm i` beforehand.
+When you clone the repo, you can develop using a variety of `gulp` scripts. Use `gulp apply` to quickly copy the developing widget into your widgets folder, & `gulp dev` to watch for changes and apply them into the widgets folder.
