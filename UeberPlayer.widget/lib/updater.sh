@@ -17,6 +17,9 @@ mv -f UeberPlayer.widget/cache ../cache &&
 rsync -a --delete ../ueberplayer_update/ UeberPlayer.widget/ &&
 mv -f ../cache UeberPlayer.widget/cache &&
 
+# Open changelog
+open https://github.com/aCluelessDanny/UeberPlayer/releases/latest
+
 # Remove temporary files
 rm -rf ../configTemp.txt &&
 rm -rf ../ueberplayer_update/ &&
