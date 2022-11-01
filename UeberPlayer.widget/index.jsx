@@ -1,4 +1,3 @@
-
 import { styled, run } from "uebersicht";
 import getColors from './lib/getColors.js';
 import updateWidget from './lib/updater.js';
@@ -14,11 +13,11 @@ const options = {
   size: "big",                  // -> big (default) | medium | small | mini
 
   /* Widget position! */
-  verticalPosition: "top",      // -> top (default) | center | bottom | "<number>" | "-<number>"
+  verticalPosition: "40",      // -> top (default) | center | bottom | "<number>" | "-<number>"
   horizontalPosition: "left",   // -> left (default) | center | right | "<number>" | "-<number>"
 
   /* Widget visibility! */
-  alwaysShow: 0,                // -> 0 (default) | 1 | 2
+  alwaysShow: 2,                // -> 0 (default) | 1 | 2
 
   /* Adaptive colors! */
   adaptiveColors: true,         // -> true (default) | false
@@ -32,7 +31,7 @@ const options = {
   cacheMaxDays: 15,             // -> 15 (default) | <number>
 
   /* Check for updates */
-  checkForUpdates: true         // -> true (default) | false
+  checkForUpdates: false         // -> true (default) | false
 }
 
 /* ROOT STYLING */
