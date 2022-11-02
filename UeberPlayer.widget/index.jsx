@@ -1,6 +1,7 @@
 import { styled, run } from "uebersicht";
 import getColors from './lib/getColors.js';
 import updateWidget from './lib/updater.js';
+import * as Icons from './icons.jsx';
 const _version = '1.4.0';
 let _updateTimer = 8.5;
 
@@ -13,7 +14,7 @@ const options = {
   size: "small",                  // -> big (default) | medium | small | mini
 
   /* Widget position! */
-  verticalPosition: "44",      // -> top (default) | center | bottom | "<number>" | "-<number>"
+  verticalPosition: "50",      // -> top (default) | center | bottom | "<number>" | "-<number>"
   horizontalPosition: "left",   // -> left (default) | center | right | "<number>" | "-<number>"
 
   /* Widget visibility! */
@@ -386,6 +387,10 @@ const UpdateText = styled("p")`
     text-decoration: underline;
   }
 `
+const Controls = styled("div")`
+  top: 0;
+`
+
 
 /* UEBER-SPECIFIC STUFF */
 
@@ -595,6 +600,17 @@ const ArtworkImage = ({ artwork: { art1, art2, alternate }, wrapperClass }) => (
   </ArtworkWrapper>
 )
 
+// Song control icons
+const MiddleIcon = ({ isPlaying, isStopped }) => {
+  if(isStopped) {
+    return Icons.Stopped();
+  } else if(isPlaying) {
+    return Icons.Play();
+  } else {
+    return Icons.Paused();
+  }
+}
+
 // Update notification component
 const UpdateNotif = ({ dispatch, updatePending, useBackground, color = 'inherit' }) => {
   const UpdateLink = (
@@ -673,8 +689,11 @@ const Small = ({ state, dispatch }) => {
     tercaryColor,
     artwork,
     updateAvailable,
-    updatePending
+    updatePending,
+    playing,
+    app
   } = state;
+  const isStopped = (app === "");
 
   return (
     <SmallPlayer>
@@ -686,6 +705,9 @@ const Small = ({ state, dispatch }) => {
         <Album color={tercaryColor}>{album}</Album>
         {updateAvailable && <UpdateNotif dispatch={dispatch} updatePending={updatePending} color={secondaryColor}/>}
       </Information>
+      <Controls>
+        <MiddleIcon isPlaying={playing} isStopped={isStopped} />
+      </Controls>
     </SmallPlayer>
   )
 }

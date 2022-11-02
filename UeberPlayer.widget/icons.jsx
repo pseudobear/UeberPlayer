@@ -1,5 +1,4 @@
-const Icon = ({ width = 24, height = 24, children, ...props }) => (
-  <svg
+const Icon = ({ width = 24, height = 24, children, ...props }) => ( <svg
     viewBox={`0 0 ${width} ${height}`}
     width={width}
     height={height}
@@ -9,11 +8,11 @@ const Icon = ({ width = 24, height = 24, children, ...props }) => (
   </svg>
 );
 
-export const Play = (props) => {
+export const Play = (props) => (
   <Icon {...props}>
     <path d="M4.8 20V4l14.4 8-14.4 8z" />
   </Icon>
-};
+);
 
 export const Paused = (props) => (
   <Icon {...props}>
@@ -27,16 +26,16 @@ export const Stopped = (props) => (
   </Icon>
 );
 
-export const PlayNext = (props) => {
+export const PlayNext = (props) => (
   <Icon {...props}>
     <path d="M6 17L14 12L6 7V17Z" />
     <path d="M18 7H15V12V17H18V7Z" />
   </Icon>
-};
+);
 
-export const PlayPrev = (props) => {
+export const PlayPrev = (props) => (
   <Icon {...props}>
     <path d="M18 17L10 12L18 7V17Z" />
     <path d="M6 7H9V17H6V7Z" />  
   </Icon>
-};
+);
