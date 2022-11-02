@@ -10,7 +10,7 @@ For more details about these settings: please visit https://github.com/aClueless
 
 const options = {
   /* Widget size! */
-  size: "big",                  // -> big (default) | medium | small | mini
+  size: "small",                  // -> big (default) | medium | small | mini
 
   /* Widget position! */
   verticalPosition: "44",      // -> top (default) | center | bottom | "<number>" | "-<number>"
@@ -43,7 +43,7 @@ export const className = `
   left: 0;
   bottom: 0;
   right: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: JetBrains Mono, Monaco, Menlo, monospace, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   color: white;
 
   * {
@@ -158,8 +158,8 @@ const MediumPlayer = styled(BigPlayer)`
 const SmallPlayer = styled("div")`
   position: relative;
   display: flex;
-  height: 80px;
-  width: 340px;
+  height: 120px;
+  width: 360px;
 `
 
 const MiniPlayer = styled("div")`
@@ -672,13 +672,13 @@ const Small = ({ state, dispatch }) => {
 
   return (
     <SmallPlayer>
+      <Progress progressColor={secondaryColor} emptyColor={tercaryColor} className="small" percent={elapsed / duration * 100}/>
       <ArtworkImage artwork={artwork} wrapperClass='small'/>
       <Information className="small">
         <Track color={secondaryColor}>{track}</Track>
         <Artist color={tercaryColor}>{artist}</Artist>
         <Album color={tercaryColor}>{album}</Album>
         {updateAvailable && <UpdateNotif dispatch={dispatch} updatePending={updatePending} color={secondaryColor}/>}
-        <Progress progressColor={secondaryColor} emptyColor={tercaryColor} className="small" percent={elapsed / duration * 100}/>
       </Information>
     </SmallPlayer>
   )
