@@ -13,7 +13,7 @@ const options = {
   size: "big",                  // -> big (default) | medium | small | mini
 
   /* Widget position! */
-  verticalPosition: "40",      // -> top (default) | center | bottom | "<number>" | "-<number>"
+  verticalPosition: "44",      // -> top (default) | center | bottom | "<number>" | "-<number>"
   horizontalPosition: "left",   // -> left (default) | center | right | "<number>" | "-<number>"
 
   /* Widget visibility! */
