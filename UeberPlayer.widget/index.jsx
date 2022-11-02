@@ -86,7 +86,7 @@ const Wrapper = styled("div")`
   position: absolute;
   border-radius: 6px;
   overflow: hidden;
-  box-shadow: 0 16px 32px 9px #0005;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.24); 
   opacity: ${props => props.show ? 1 : 0};
   background: ${props => (props.bg !== undefined) ? props.bg : "#0004"};
   transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
@@ -189,7 +189,8 @@ const MiniDetails = styled("div")`
 
 const ArtworkWrapper = styled("div")`
   position: relative;
-  width: 240px;
+  left: -2px;
+  width: 244px;
   height: 240px;
 
   &.medium {
