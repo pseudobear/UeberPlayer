@@ -158,7 +158,7 @@ const MediumPlayer = styled(BigPlayer)`
 const SmallPlayer = styled("div")`
   position: relative;
   display: flex;
-  height: 120px;
+  height: 122px;
   width: 360px;
 `
 
@@ -199,8 +199,12 @@ const ArtworkWrapper = styled("div")`
   }
 
   &.small {
-    width: 80px;
-    height: 80px;
+    left: 15px;
+    top: 15px;
+    width: 90px;
+    height: 90px;
+    border-radius: 6px;
+    overflow: hidden;
   }
 
   &.mini {
@@ -258,6 +262,8 @@ const Information = styled("div")`
   &.small {
     flex: 1;
     width: 0;
+    margin-left: 17px;
+    margin-top: -20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
