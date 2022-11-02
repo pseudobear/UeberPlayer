@@ -524,7 +524,7 @@ const updateSongData = (output, error, previousState) => {
   elapsed = Math.floor(parseFloat(elapsed));
 
   // State controller
-  if (!playing || appleMusicError) {   // If player is paused or if online music is being played on Apple Music
+  if (appleMusicError) {   // If online music is being played on Apple Music
     return { ...previousState, app, playing, appleMusicError };
   } else if (track !== previousState.song.track || album !== previousState.song.album) {    // Song change
     return {
