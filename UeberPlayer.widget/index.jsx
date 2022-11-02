@@ -526,6 +526,8 @@ const updateSongData = (output, error, previousState) => {
   // State controller
   if (appleMusicError) {   // If online music is being played on Apple Music
     return { ...previousState, app, playing, appleMusicError };
+  } else if (!app) {
+    return initialState;
   } else if (track !== previousState.song.track || album !== previousState.song.album) {    // Song change
     return {
       ...previousState,
