@@ -53,16 +53,14 @@ if spotifyInstalled and application "Spotify" is running then
       end if
     end using terms from
 
-    if playingState is true then
-      set trackName to the name of current track
-      set artistName to the artist of current track
-      set albumName to the album of current track
-      set artworkURL to the artwork url of current track
-      set trackDuration to the (duration of current track) / 1000
-      set timeElapsed to the player position
+    set trackName to the name of current track
+    set artistName to the artist of current track
+    set albumName to the album of current track
+    set artworkURL to the artwork url of current track
+    set trackDuration to the (duration of current track) / 1000
+    set timeElapsed to the player position
 
-      set artExtension to ".jpg"
-    end if
+    set artExtension to ".jpg"
   end tell
 end if
 

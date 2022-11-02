@@ -219,7 +219,6 @@ const ArtworkWrapper = styled("div")`
     right: 0;
     border-radius: 6px 6px 0 0;
     background: #fff1;
-    backdrop-filter: blur(8px) brightness(90%) contrast(80%) saturate(140%);
     z-index: -1;
   }
 
@@ -246,7 +245,7 @@ const Information = styled("div")`
   padding: .5em .75em;
   line-height: 1.3;
   border-radius: 0 0 6px 6px;
-  backdrop-filter: ${options.adaptiveColors ? "blur(8px)" : "blur(8px) brightness(90%) contrast(80%) saturate(140%)"};
+  backdrop-filter: ${options.adaptiveColors ? "" : "blur(8px) brightness(90%) contrast(80%) saturate(140%)"};
 
   > p {
     text-align: center;
@@ -398,6 +397,7 @@ export const init = (dispatch) => {
 };
 
 export const command = "osascript UeberPlayer.widget/lib/getTrack.scpt";
+export const refreshFrequency = 500; // widget will run command once a second
 
 export const initialState = {
   app: "",                                          // Current music software being used
@@ -429,6 +429,8 @@ export const initialState = {
 export const updateState = ({ type, output, error }, previousState) => {
   switch (type) {
     case 'UB/COMMAND_RAN':
+      console.log("UB/COMMAND_RAN");
+      console.log(output);
       return updateSongData(output, error, previousState);
     case 'GET_ART':
       if (options.adaptiveColors) {
