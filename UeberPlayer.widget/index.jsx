@@ -1,7 +1,8 @@
 import { styled, run } from "uebersicht";
 import getColors from './lib/getColors.js';
 import updateWidget from './lib/updater.js';
-import * as Icons from './icons.jsx';
+import * as Icons from './lib/icons.jsx';
+import * as Utils from './lib/utils.jsx';
 const _version = '1.4.0';
 let _updateTimer = 8.5;
 
@@ -242,6 +243,7 @@ const Artwork = styled("img")`
   height: 100%;
   width: 100%;
   object-fit: cover;
+  border-radius: 6px;
   opacity: ${props => props.show ? 1 : 0};
   transition: opacity .5s linear;
 `;
@@ -389,6 +391,7 @@ const UpdateText = styled("p")`
 `
 
 const Controls = styled("div")`
+  pointer-events: auto; !important;
   position: absolute;
   left: 37%;
   top: 75px;
@@ -396,6 +399,16 @@ const Controls = styled("div")`
   height: 40px;
   padding: 6px;
   text-align: center !important;
+`
+
+const IconWrapper = styled("button")`
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
 `
 
 /* UEBER-SPECIFIC STUFF */
@@ -447,8 +460,6 @@ export const initialState = {
 export const updateState = ({ type, output, error }, previousState) => {
   switch (type) {
     case 'UB/COMMAND_RAN':
-      console.log("UB/COMMAND_RAN");
-      console.log(output);
       return updateSongData(output, error, previousState);
     case 'GET_ART':
       if (options.adaptiveColors) {
@@ -597,6 +608,21 @@ const prepareArtwork = (dispatch, song) => {
   img.src = song.localArtwork;
 }
 
+const onClickMid = (e, playing) => {
+  console.log(playing);
+  const action = (playing) ? "pause" : "play";
+  Utils.clickEffect(e);
+  run(`osascript -e 'tell application "Spotify" to ${action}'`);
+}
+
+const onClickLeft = (e) => {
+
+}
+
+const onClickRight = (e) => {
+
+}
+
 // RENDERING //
 // Artwork image
 const ArtworkImage = ({ artwork: { art1, art2, alternate }, wrapperClass }) => (
@@ -714,7 +740,9 @@ const Small = ({ state, dispatch }) => {
       <Controls>
         <Icons.PlayPrev color={tercaryColor} />
         <span style={{padding: "17px"}}/>
-        <MiddleIcon color={tercaryColor} isPlaying={playing} isStopped={isStopped} />
+        <IconWrapper onClick={ (e) => onClickMid(e, playing) }>
+          <MiddleIcon color={tercaryColor} isPlaying={playing} isStopped={isStopped} />
+        </IconWrapper>
         <span style={{padding: "17px"}}/>
         <Icons.PlayNext color={tercaryColor} />
       </Controls>
