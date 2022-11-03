@@ -387,10 +387,16 @@ const UpdateText = styled("p")`
     text-decoration: underline;
   }
 `
-const Controls = styled("div")`
-  top: 0;
-`
 
+const Controls = styled("div")`
+  position: absolute;
+  left: 37%;
+  top: 75px;
+  width: 50%;
+  height: 40px;
+  padding: 6px;
+  text-align: center !important;
+`
 
 /* UEBER-SPECIFIC STUFF */
 
@@ -601,13 +607,13 @@ const ArtworkImage = ({ artwork: { art1, art2, alternate }, wrapperClass }) => (
 )
 
 // Song control icons
-const MiddleIcon = ({ isPlaying, isStopped }) => {
+const MiddleIcon = ({ color, isPlaying, isStopped }) => {
   if(isStopped) {
-    return Icons.Stopped();
+    return Icons.Stopped({ color });
   } else if(isPlaying) {
-    return Icons.Play();
+    return Icons.Play({ color });
   } else {
-    return Icons.Paused();
+    return Icons.Paused({ color });
   }
 }
 
@@ -706,7 +712,11 @@ const Small = ({ state, dispatch }) => {
         {updateAvailable && <UpdateNotif dispatch={dispatch} updatePending={updatePending} color={secondaryColor}/>}
       </Information>
       <Controls>
-        <MiddleIcon isPlaying={playing} isStopped={isStopped} />
+        <Icons.PlayPrev color={tercaryColor} />
+        <span style={{padding: "17px"}}/>
+        <MiddleIcon color={tercaryColor} isPlaying={playing} isStopped={isStopped} />
+        <span style={{padding: "17px"}}/>
+        <Icons.PlayNext color={tercaryColor} />
       </Controls>
     </SmallPlayer>
   )

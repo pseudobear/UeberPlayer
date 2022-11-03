@@ -1,7 +1,8 @@
-const Icon = ({ width = 24, height = 24, children, ...props }) => ( <svg
+const Icon = ({ width = 24, height = 24, color = "#2c3046", children, ...props }) => ( <svg
     viewBox={`0 0 ${width} ${height}`}
     width={width}
     height={height}
+    fill={color}
     {...props}
   >
     {children}
