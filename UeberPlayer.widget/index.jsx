@@ -608,19 +608,21 @@ const prepareArtwork = (dispatch, song) => {
   img.src = song.localArtwork;
 }
 
-const onClickMid = (e, playing) => {
-  console.log(playing);
+const onClickMid = (e, playing, isStopped) => {
+  if(isStopped) return;
   const action = (playing) ? "pause" : "play";
   Utils.clickEffect(e);
   run(`osascript -e 'tell application "Spotify" to ${action}'`);
 }
 
 const onClickLeft = (e) => {
-
+  Utils.clickEffect(e);
+  run(`osascript -e 'tell application "Spotify" to Previous Track'`);
 }
 
 const onClickRight = (e) => {
-
+  Utils.clickEffect(e);
+  run(`osascript -e 'tell application "Spotify" to Next Track'`);
 }
 
 // RENDERING //
@@ -738,13 +740,17 @@ const Small = ({ state, dispatch }) => {
         {updateAvailable && <UpdateNotif dispatch={dispatch} updatePending={updatePending} color={secondaryColor}/>}
       </Information>
       <Controls>
-        <Icons.PlayPrev color={tercaryColor} />
+        <IconWrapper onClick={onClickLeft}>
+          <Icons.PlayPrev color={tercaryColor} />
+        </IconWrapper>
         <span style={{padding: "17px"}}/>
-        <IconWrapper onClick={ (e) => onClickMid(e, playing) }>
+        <IconWrapper onClick={ (e) => onClickMid(e, playing, isStopped) }>
           <MiddleIcon color={tercaryColor} isPlaying={playing} isStopped={isStopped} />
         </IconWrapper>
         <span style={{padding: "17px"}}/>
-        <Icons.PlayNext color={tercaryColor} />
+        <IconWrapper onClick={onClickRight}>
+          <Icons.PlayNext color={tercaryColor} />
+        </IconWrapper>
       </Controls>
     </SmallPlayer>
   )
