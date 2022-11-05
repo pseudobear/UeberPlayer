@@ -90,7 +90,7 @@ const Wrapper = styled("div")`
   overflow: hidden;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.24); 
   opacity: ${props => props.show ? 1 : 0};
-  background: ${props => (props.bg !== undefined) ? props.bg : "#0004"};
+  background: ${props => (props.bg !== undefined) ? props.bg : "#fdf6ef"};
   transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   ${wrapperPos}
 
@@ -409,6 +409,7 @@ const IconWrapper = styled("button")`
   font: inherit;
   cursor: pointer;
   outline: inherit;
+  opacity: ${ props => props.app ? 1 : 0 };
 `
 
 /* UEBER-SPECIFIC STUFF */
@@ -439,8 +440,8 @@ export const initialState = {
   secondaryColor: undefined,                        // Secondary color from artwork
   tercaryColor: undefined,                          // Tercary color from artwork
   artwork: {                                        // Artwork source URL to be used
-    art1: "UeberPlayer.widget/default.png",           // Artwork to alternate with
-    art2: "UeberPlayer.widget/default.png",           // Same as above
+    art1: "UeberPlayer.widget/default.jpg",           // Artwork to alternate with
+    art2: "UeberPlayer.widget/default.jpg",           // Same as above
     alternate: true                                   // Flag to pick which artwork to display (for smooth transitions)
   },
   song: {                                           // Current song data
@@ -754,15 +755,15 @@ const Small = ({ state, dispatch }) => {
         {updateAvailable && <UpdateNotif dispatch={dispatch} updatePending={updatePending} color={secondaryColor}/>}
       </Information>
       <Controls>
-        <IconWrapper onClick={onClickLeft}>
+        <IconWrapper app={app} onClick={onClickLeft}>
           <Icons.PlayPrev color={tercaryColor} />
         </IconWrapper>
         <span style={{padding: "17px"}}/>
-        <IconWrapper onClick={ (e) => onClickMid(e, playing, isStopped, app) }>
+        <IconWrapper app={app} onClick={ (e) => onClickMid(e, playing, isStopped, app) }>
           <MiddleIcon color={tercaryColor} isPlaying={playing} isStopped={isStopped} />
         </IconWrapper>
         <span style={{padding: "17px"}}/>
-        <IconWrapper onClick={ (e) => onClickRight(e, app)}>
+        <IconWrapper app={app} onClick={ (e) => onClickRight(e, app)}>
           <Icons.PlayNext color={tercaryColor} />
         </IconWrapper>
       </Controls>
