@@ -608,21 +608,33 @@ const prepareArtwork = (dispatch, song) => {
   img.src = song.localArtwork;
 }
 
-const onClickMid = (e, playing, isStopped) => {
+const onClickMid = (e, playing, isStopped, app) => {
   if(isStopped) return;
   const action = (playing) ? "pause" : "play";
   Utils.clickEffect(e);
-  run(`osascript -e 'tell application "Spotify" to ${action}'`);
+  if(app == "Spotify") {
+    run(`osascript -e 'tell application "Spotify" to ${action}'`);
+  } else if(app == "YT Music") {
+
+  }
 }
 
-const onClickLeft = (e) => {
+const onClickLeft = (e, app) => {
   Utils.clickEffect(e);
-  run(`osascript -e 'tell application "Spotify" to Previous Track'`);
+  if(app == "Spotify") {
+    run(`osascript -e 'tell application "Spotify" to Previous Track'`);
+  } else if (app == "YT Music") {
+
+  }
 }
 
-const onClickRight = (e) => {
+const onClickRight = (e, app) => {
   Utils.clickEffect(e);
-  run(`osascript -e 'tell application "Spotify" to Next Track'`);
+  if(app == "Spotify") {
+    run(`osascript -e 'tell application "Spotify" to Next Track'`);
+  } else if (app == "YT Music") {
+
+  }
 }
 
 // RENDERING //
@@ -744,11 +756,11 @@ const Small = ({ state, dispatch }) => {
           <Icons.PlayPrev color={tercaryColor} />
         </IconWrapper>
         <span style={{padding: "17px"}}/>
-        <IconWrapper onClick={ (e) => onClickMid(e, playing, isStopped) }>
+        <IconWrapper onClick={ (e) => onClickMid(e, playing, isStopped, app) }>
           <MiddleIcon color={tercaryColor} isPlaying={playing} isStopped={isStopped} />
         </IconWrapper>
         <span style={{padding: "17px"}}/>
-        <IconWrapper onClick={onClickRight}>
+        <IconWrapper onClick={ (e) => onClickRight(e, app)}>
           <Icons.PlayNext color={tercaryColor} />
         </IconWrapper>
       </Controls>
