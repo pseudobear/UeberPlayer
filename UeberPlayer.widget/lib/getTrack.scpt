@@ -97,7 +97,7 @@ tell application "Safari"
     repeat with t in tabs of w
       if URL of t contains "music.youtube.com"
         tell t
-          set outp to do javascript "(document.getElementById('song-image') == null) ? 0 : 1;"
+          set outp to do javascript "document.getElementsByClassName('middle-controls')[0].children[0].children[0] == null ? 0 : 1;"
           if outp is 1 then   # then song image is there, we must be on the music playing screen, use YT music as app
             set appName to "YT Music"
 
@@ -106,7 +106,7 @@ tell application "Safari"
               set playingState to true
             end if
              
-            set artworkURL to do javascript "document.getElementById('song-image').children[0].children[0].src"
+            set artworkURL to do javascript "document.getElementsByClassName('middle-controls')[0].children[0].children[0].src"
             set artExtension to ".jpg"
 
             set trackName to do javascript "document.getElementsByClassName('middle-controls')[0].children[1].children[0].innerHTML"
