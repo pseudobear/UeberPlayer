@@ -547,6 +547,8 @@ const updateSongData = (output, error, previousState) => {
     appleMusicError
   ] = output.trim().split(" @@ ");
 
+  console.log(output);
+
   playing = (playing === "true");
   appleMusicError = (appleMusicError === "true");
   duration = Math.floor(parseFloat(duration));
