@@ -32,7 +32,7 @@ end try
 -- Use a .plist file to detect changes
 set plist_filepath to (mypath & "currentTrack.plist" as string)
 
---- -- - MAIN ROUTINE - -- ---
+-- -- - MAIN ROUTINE - -- ---
 
 -- Check if Spotify is installed
 try
@@ -90,6 +90,39 @@ if playingState is false and application "Music" is running then
     end if
   end tell
 end if
+
+-- YT music app data via safari webpage :)
+tell application "Safari"
+  repeat with w in every window
+    repeat with t in tabs of w
+      if URL of t contains "music.youtube.com"
+        tell t
+          set outp to do javascript "(document.getElementById('song-image') == null) ? 0 : 1;"
+          if outp is 1 then   # then song image is there, we must be on the music playing screen, use YT music as app
+            set appName to "YT Music"
+
+            set outp to do javascript "document.getElementById('play-pause-button').title == 'play' ? 0 : 1"
+            if outp is 1 then
+              set playingState to true
+            end if
+             
+            set artworkURL to do javascript "document.getElementById('song-image').children[0].children[0].src"
+            set artExtension to ".jpg"
+
+            set trackName to do javascript "document.getElementsByClassName('middle-controls')[0].children[1].children[0].innerHTML"
+
+            set artistName to do javascript "document.getElementsByClassName('content-info-wrapper')[0].children[1].children[2].children[0].children[0].innerHTML"
+
+            set albumName  to do javascript "document.getElementsByClassName('content-info-wrapper')[0].children[1].children[2].children[0].children[2].innerHTML"
+
+            set trackDuration to do javascript "document.getElementById('progress-bar').ariaValueMax"
+            set timeElapsed to do javascript "document.getElementById('progress-bar').ariaValueNow"
+          end if
+        end tell
+      end if
+    end repeat
+  end repeat
+end tell
 
 set artworkFilename to generateArtFilename(albumName & "-" & artistName & artExtension as string)
 

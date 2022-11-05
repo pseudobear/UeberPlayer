@@ -428,7 +428,7 @@ export const init = (dispatch) => {
 };
 
 export const command = "osascript UeberPlayer.widget/lib/getTrack.scpt";
-export const refreshFrequency = 500; // widget will run command once a second
+export const refreshFrequency = 500; 
 
 export const initialState = {
   app: "",                                          // Current music software being used
